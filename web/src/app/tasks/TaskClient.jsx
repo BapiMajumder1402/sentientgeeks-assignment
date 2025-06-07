@@ -8,6 +8,7 @@ import useDebounce from '@/hooks/useDebounce';
 import TaskForm from './TaskForm';
 import TaskControls from './TaskControls';
 import TaskList from './TaskList';
+import EditTaskModal from './EditTaskModal';
 
 const TASK_QUERY_KEY = 'tasks';
 
@@ -102,6 +103,18 @@ export default function TaskClient({ initialData }) {
         onDelete={deleteMutation.mutate}
         onToggle={(task) =>
           toggleMutation.mutate({ id: task._id, completed: !task.completed })
+        }
+      />
+
+      <EditTaskModal
+        editId={editId}
+        taskTitle={task}
+        onClose={() => {
+          setEditId(null);
+          setTask('');
+        }}
+        onUpdate={(newTitle) =>
+          taskMutation.mutate({ title: newTitle, editId })
         }
       />
     </div>

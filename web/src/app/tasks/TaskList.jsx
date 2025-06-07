@@ -5,6 +5,7 @@ export default function TaskList({
   isLoading,
   setTask,
   setEditId,
+  editId,
   onDelete,
   onToggle,
 }) {
@@ -13,41 +14,50 @@ export default function TaskList({
   return (
     <>
       <ul className="space-y-2">
-        {data?.tasks?.map((task) => (
-          <li
-            key={task._id}
-            className="border p-3 rounded flex justify-between items-center"
-          >
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => onToggle(task)}
-                className="mr-2"
-              />
-              <span className={task.completed ? 'line-through text-gray-500' : ''}>
-                {task.title}
-              </span>
-            </div>
-            <div className="space-x-2">
-              <button
-                onClick={() => {
-                  setTask(task.title);
-                  setEditId(task._id);
-                }}
-                className="text-blue-600 text-sm"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => onDelete(task._id)}
-                className="text-red-600 text-sm"
-              >
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
+{data?.tasks?.map((task) => (
+  <li
+    key={task._id}
+    className="border p-3 rounded flex flex-col sm:flex-row sm:justify-between sm:items-center"
+  >
+    <div className="flex flex-col">
+      <div className="flex items-center">
+        <input
+          type="checkbox"
+          checked={task.completed}
+          onChange={() => onToggle(task)}
+          className="mr-2"
+        />
+        <span className={task.completed ? 'line-through text-gray-500' : ''}>
+          {task.title}
+        </span>
+      </div>
+      <span className="text-xs text-gray-400 mt-1 ml-6">
+        {new Date(task.createdAt).toLocaleString()}
+      </span>
+    </div>
+
+    <div className="space-x-2 mt-2 sm:mt-0">
+      {!task.completed && (
+        <button
+          onClick={() => {
+            setTask(task.title);
+            setEditId(task._id);
+          }}
+          className="text-blue-600 text-sm"
+        >
+          Edit
+        </button>
+      )}
+      <button
+        onClick={() => onDelete(task._id)}
+        className="text-red-600 text-sm"
+      >
+        Delete
+      </button>
+    </div>
+  </li>
+))}
+
       </ul>
 
       <div className="flex justify-center mt-4 space-x-2 flex-wrap">
