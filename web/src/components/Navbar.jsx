@@ -18,7 +18,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-800 text-white px-4 py-2 flex justify-between items-center">
-      <Link href="/" className="text-lg font-bold">TodoApp</Link>
+      <Link href="/" className="text-lg font-bold">Todo App</Link>
       <div className="space-x-4">
         {user ? (
           <>
