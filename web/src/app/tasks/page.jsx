@@ -1,16 +1,21 @@
+// src/app/tasks/page.jsx
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import TaskClient from './TaskClient';
 
 async function getTasks({ page = 1, search = '' }) {
-  const token = cookies().get('token')?.value;
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks?page=${page}&search=${search}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/tasks?page=${page}&search=${search}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: 'no-store', 
+    }
+  );
 
   if (!res.ok) {
     redirect('/login'); 
