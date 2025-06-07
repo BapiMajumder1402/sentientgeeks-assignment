@@ -34,5 +34,7 @@ export const TaskListSchema = z.object({
     search: z.string().optional(),
     page: z.string().regex(/^\d+$/, 'Page must be a number').optional(),
     limit: z.string().regex(/^\d+$/, 'Limit must be a number').optional(),
+    sortBy: z.enum(['createdAt', 'title']).optional(),
+    order: z.enum(['asc', 'desc']).optional(),
   }),
 });
