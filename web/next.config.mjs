@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
         experimental: {
-            serverActions: true,
+            serverActions: {},
         },
-        output:"export"
 };
 
 export default nextConfig;
