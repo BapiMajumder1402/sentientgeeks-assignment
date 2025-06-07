@@ -5,7 +5,7 @@ import TaskClient from './TaskClient';
 async function getTasks({ page = 1, search = '' }) {
   const token = cookies().get('token')?.value;
 
-  const res = await fetch(`http://localhost:5000/api/tasks?page=${page}&search=${search}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks?page=${page}&search=${search}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
