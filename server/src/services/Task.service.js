@@ -6,20 +6,29 @@ export class TaskService {
     return await Task.create({ user: userId, title });
   }
 
-  static async list(userId, search = '', page = 1, limit = 10) {
-    const query = {
-      user: userId,
-      title: { $regex: new RegExp(search, 'i') },
-    };
+static async list(userId, search = '', page = 1, limit = 10) {
+  const query = {
+    user: userId,
+    title: { $regex: new RegExp(search, 'i') },
+  };
 
-    const tasks = await Task.find(query)
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .sort({ createdAt: -1 });
+  const tasks = await Task.find(query)
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .sort({ createdAt: -1 });
 
-    const total = await Task.countDocuments(query);
-    return { tasks, total };
-  }
+  const total = await Task.countDocuments(query);
+  const totalPages = Math.ceil(total / limit);
+
+  return {
+    tasks,
+    total,
+    totalPages,
+    currentPage: page,
+    limit,
+  };
+}
+
 
 
   static async update(taskId, userId, title) {

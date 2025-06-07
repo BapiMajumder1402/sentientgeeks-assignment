@@ -10,15 +10,21 @@ export class TaskController {
   });
 
   // List tasks with pagination and search
-  static list = asyncHandler(async (req, res) => {
+static list = asyncHandler(async (req, res) => {
     const { search = '', page = '1', limit = '10' } = req.query;
+
     const result = await TaskService.list(
-      req.userId,
-      String(search),
-      Number(page),
-      Number(limit)
+      req.userId,                    
+      String(search),                
+      Number(page),                 
+      Number(limit)                   
     );
-    res.json({ success: true, ...result });
+
+    res.status(200).json({
+      success: true,
+      message: 'Tasks fetched successfully',
+      ...result              
+    });
   });
 
   // Update task title
