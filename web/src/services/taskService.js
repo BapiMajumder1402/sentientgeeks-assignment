@@ -1,9 +1,15 @@
 import axios from '@/lib/axios';
 
-export const fetchTasks = async (page = 1, search = '') => {
-  const res = await axios.get(`/tasks?page=${page}&search=${search}`);
-  return res.data;
-};
+export const fetchTasks = async({ page = 1, search = '', limit = 5, sortBy = 'createdAt', sortOrder = 'desc' }) =>{
+  try {
+    const response = await axios.get('/tasks', {
+      params: { page, search, limit, sortBy, order:sortOrder },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch tasks');
+  }
+}
 
 export const createTask = async (title) => {
   const res = await axios.post('/tasks', { title });

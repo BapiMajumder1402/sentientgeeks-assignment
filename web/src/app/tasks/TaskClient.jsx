@@ -22,10 +22,15 @@ export default function TaskClient({ initialData }) {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
 
+    const [limit, setLimit] = useState(5);
+    const [sortBy, setSortBy] = useState('createdAt');
+    const [sortOrder, setSortOrder] = useState('desc');
+
     const debouncedSearch = useDebounce(search, 500);
+
     const { data, isLoading } = useQuery({
-        queryKey: ['tasks', page, debouncedSearch],
-        queryFn: () => fetchTasks(page, debouncedSearch),
+        queryKey: ['tasks', page, debouncedSearch, limit, sortBy, sortOrder],
+        queryFn: () => fetchTasks({ page, search: debouncedSearch, limit, sortBy, sortOrder }),
         initialData,
         keepPreviousData: true,
     });
@@ -101,7 +106,40 @@ export default function TaskClient({ initialData }) {
                     {editId ? 'Update' : 'Add'}
                 </button>
             </div>
+            <div className="flex justify-between items-center mb-4 space-x-4">
+                <select
+                    value={limit}
+                    onChange={(e) => {
+                        setLimit(Number(e.target.value));
+                        setPage(1);
+                    }}
+                    className="border p-2 rounded"
+                >
+                    {[5, 10, 20].map((num) => (
+                        <option key={num} value={num}>
+                            {num} per page
+                        </option>
+                    ))}
+                </select>
 
+                <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="border p-2 rounded"
+                >
+                    <option value="createdAt">Sort by Date</option>
+                    <option value="title">Sort by Title</option>
+                </select>
+
+                <select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="border p-2 rounded"
+                >
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
             <input
                 type="text"
                 value={search}
@@ -112,6 +150,8 @@ export default function TaskClient({ initialData }) {
                 placeholder="Search tasks"
                 className="w-full border p-2 rounded mb-4"
             />
+
+
 
             {isLoading ? (
                 <p className="text-center">Loading...</p>
@@ -147,12 +187,13 @@ export default function TaskClient({ initialData }) {
                     </ul>
 
                     <div className="flex justify-center mt-4 space-x-2">
-                        {Array.from({ length: data.totalPages }).map((e, i) => (
+                        {Array.from({ length: data.totalPages }).map((_, i) => (
                             <button
                                 key={i}
                                 onClick={() => setPage(i + 1)}
-                                className={`px-3 py-1 rounded border ${page === i + 1 ? 'bg-blue-600 text-white' : ''
-                                    }`}
+                                className={`px-3 py-1 rounded border ${
+                                    page === i + 1 ? 'bg-blue-600 text-white' : ''
+                                }`}
                             >
                                 {i + 1}
                             </button>

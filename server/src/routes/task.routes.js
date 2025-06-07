@@ -48,7 +48,7 @@ router.post('/', authenticate, validate(CreateTaskSchema), TaskController.create
  * @swagger
  * /api/tasks:
  *   get:
- *     summary: List tasks with pagination and search
+ *     summary: List tasks with pagination, search, and sorting
  *     tags: [Tasks]
  *     security:
  *       - bearerAuth: []
@@ -57,14 +57,29 @@ router.post('/', authenticate, validate(CreateTaskSchema), TaskController.create
  *         name: search
  *         schema:
  *           type: string
+ *         description: Search by task title
  *       - in: query
  *         name: page
  *         schema:
  *           type: string
+ *         description: Page number for pagination
  *       - in: query
  *         name: limit
  *         schema:
  *           type: string
+ *         description: Number of tasks per page
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *           enum: [createdAt, title]
+ *         description: Field to sort by (e.g., createdAt or title)
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *         description: Sort order (asc or desc)
  *     responses:
  *       200:
  *         description: List of tasks

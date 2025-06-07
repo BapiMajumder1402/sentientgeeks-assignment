@@ -11,21 +11,24 @@ export class TaskController {
 
   // List tasks with pagination and search
 static list = asyncHandler(async (req, res) => {
-    const { search = '', page = '1', limit = '10' } = req.query;
+  const { search = '', page = '1', limit = '10', sortBy = 'createdAt', order = 'desc' } = req.query;
 
-    const result = await TaskService.list(
-      req.userId,                    
-      String(search),                
-      Number(page),                 
-      Number(limit)                   
-    );
+  const result = await TaskService.list(
+    req.userId,
+    String(search),
+    Number(page),
+    Number(limit),
+    String(sortBy),
+    String(order)
+  );
 
-    res.status(200).json({
-      success: true,
-      message: 'Tasks fetched successfully',
-      ...result              
-    });
+  res.status(200).json({
+    success: true,
+    message: 'Tasks fetched successfully',
+    ...result
   });
+});
+
 
   // Update task title
   static update = asyncHandler(async (req, res) => {

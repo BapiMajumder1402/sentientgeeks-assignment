@@ -6,16 +6,18 @@ export class TaskService {
     return await Task.create({ user: userId, title });
   }
 
-static async list(userId, search = '', page = 1, limit = 10) {
+static async list(userId, search = '', page = 1, limit = 10, sortBy = 'createdAt', order = 'desc') {
   const query = {
     user: userId,
     title: { $regex: new RegExp(search, 'i') },
   };
 
+  const sortOrder = order === 'asc' ? 1 : -1;
+
   const tasks = await Task.find(query)
     .skip((page - 1) * limit)
     .limit(limit)
-    .sort({ createdAt: -1 });
+    .sort({ [sortBy]: sortOrder });
 
   const total = await Task.countDocuments(query);
   const totalPages = Math.ceil(total / limit);
@@ -28,7 +30,6 @@ static async list(userId, search = '', page = 1, limit = 10) {
     limit,
   };
 }
-
 
 
   static async update(taskId, userId, title) {
