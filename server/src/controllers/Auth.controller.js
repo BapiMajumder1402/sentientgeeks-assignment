@@ -22,6 +22,8 @@ static register = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await AuthService.login(email, password);
     const token = generateToken(user._id );
-    res.json({ success: true, token });
+    const userObj = user.toObject();
+    const { password: _pwd, ...userWithoutPassword } = userObj;
+    res.json({ success: true, token , user:{...userWithoutPassword} });
   });
 }
